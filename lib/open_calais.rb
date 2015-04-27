@@ -11,7 +11,7 @@ module OpenCalais
   extend Configuration
 
   HEADERS = {
-    :license_id                    => 'x-calais-licenseID',
+    :license_id                    => 'x-ag-access-token',
     :content_type                  => 'Content-Type',
     :output_format                 => 'outputFormat',
     :reltag_base_url               => 'reltagBaseURL',
@@ -29,14 +29,11 @@ module OpenCalais
   CONTENT_TYPES = {
     :xml     => 'TEXT/XML',
     :html    => 'TEXT/HTML',
-    :htmlraw => 'TEXT/HTMLRAW',
     :raw     => 'TEXT/RAW'
   }
 
   OUTPUT_FORMATS = {
     :rdf          => 'XML/RDF',
-    :simple       => 'Text/Simple',
-    :microformats => 'Text/Microformats',
     :json         => 'Application/JSON'
   }
 
