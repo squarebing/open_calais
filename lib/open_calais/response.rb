@@ -43,32 +43,44 @@ module OpenCalais
         r.each do |k,v|
           case v._typeGroup
           when 'topics'
-            self.topics << {:name => humanize_topic(v.categoryName), :score => v.score.to_f, :original => v.categoryName}
+            begin
+              self.topics << {:name => humanize_topic(v.categoryName), :score => v.score.to_f, :original => v.categoryName}
+            rescue
+            end
           when 'socialTag'
-            self.tags << {:name => v.name.gsub('_', ' and ').downcase, :score => importance_to_score(v.importance)}
+            begin
+              self.tags << {:name => v.name.gsub('_', ' and ').downcase, :score => importance_to_score(v.importance)}
+            rescue
+            end
           when 'entities'
-            item = {:guid => k, :name => v.name, :type => v._type.remove_formatting.titleize, :score => 1.0}
+            begin
+              item = {:guid => k, :name => v.name, :type => v._type.remove_formatting.titleize, :score => 1.0}
 
-            instances = Array(v.instances).select{|i| i.exact.downcase != item[:name].downcase }
-            item[:matches] = instances if instances && instances.size > 0
+              instances = Array(v.instances).select{|i| i.exact.downcase != item[:name].downcase }
+              item[:matches] = instances if instances && instances.size > 0
 
-            if OpenCalais::GEO_TYPES.include?(v._type)
-              if (v.resolutions && v.resolutions.size > 0)
-                r = v.resolutions.first
-                item[:name]      = r.shortname || r.name
-                item[:latitude]  = r.latitude
-                item[:longitude] = r.longitude
-                item[:country]   = r.containedbycountry if r.containedbycountry
-                item[:state]     = r.containedbystate if r.containedbystate
+              if OpenCalais::GEO_TYPES.include?(v._type)
+                if (v.resolutions && v.resolutions.size > 0)
+                  r = v.resolutions.first
+                  item[:name]      = r.shortname || r.name
+                  item[:latitude]  = r.latitude
+                  item[:longitude] = r.longitude
+                  item[:country]   = r.containedbycountry if r.containedbycountry
+                  item[:state]     = r.containedbystate if r.containedbystate
+                end
+                self.locations << item
+              else
+                self.entities << item
               end
-              self.locations << item
-            else
-              self.entities << item
+            rescue
             end
           when 'relations'
-            item = v.reject{|k,v| k[0] == '_' || k == 'instances'} || {}
-            item[:type] = v._type.remove_formatting.titleize
-            self.relations << item
+            begin
+              item = v.reject{|k,v| k[0] == '_' || k == 'instances'} || {}
+              item[:type] = v._type.remove_formatting.titleize
+              self.relations << item
+            rescue
+            end
           end
         end
 
