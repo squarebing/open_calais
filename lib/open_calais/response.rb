@@ -44,7 +44,7 @@ module OpenCalais
           case v._typeGroup
           when 'topics'
             begin
-              self.topics << {:name => humanize_topic(v.categoryName), :score => v.score.to_f, :original => v.categoryName}
+              self.topics << {:name => humanize_topic(v.name), :score => v.score.to_f, :original => v.name}
             rescue
             end
           when 'socialTag'
