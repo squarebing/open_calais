@@ -73,10 +73,12 @@ module OpenCalais
         end
 
         # remove social tags which are in the topics list already
-        topic_names = self.topics.collect{|topic| topic[:name].downcase}
-        self.tags.delete_if{|tag| topic_names.include?(tag[:name]) }
+        if ! self.topics.nil?
+          topic_names = self.topics.collect{|topic| topic[:name].downcase}
+          self.tags.delete_if{|tag| topic_names.include?(tag[:name]) }
+        end
       rescue Exception => e
-        Rails.logger.info "Parse Error: #{e.message}"
+        Rails.logger.info "OpenCalais Parse Error: #{e.message}"
       end
     end
   end
