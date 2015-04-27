@@ -19,7 +19,11 @@ module OpenCalais
     end
 
     def humanize_topic(topic)
-      topic.gsub('_', ' & ').titleize.remove_formatting
+      begin
+        topic.gsub('_', ' & ').titleize.remove_formatting
+      rescue
+
+      end
     end
 
     def importance_to_score(imp)
@@ -31,6 +35,7 @@ module OpenCalais
     end
 
     def parse(response)
+    begin
       r = response.body
       @language = r.doc.meta.language rescue nil
       @language = nil if @language == 'InputTextTooShort'
@@ -70,6 +75,8 @@ module OpenCalais
       # remove social tags which are in the topics list already
       topic_names = self.topics.collect{|topic| topic[:name].downcase}
       self.tags.delete_if{|tag| topic_names.include?(tag[:name]) }
+    rescue Exception => e
+      Rails.logger.info "Parse Error: #{e.message}"
     end
   end
 end
