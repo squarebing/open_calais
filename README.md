@@ -1,3 +1,7 @@
+# Update
+
+Updated to support [OpenCalais new endpoint](http://new.opencalais.com/opencalais-api/).
+
 # OpenCalais
 
 Ruby gem to access the [OpenCalais API](http://www.opencalais.com/documentation/calais-web-service-api/api-invocation/rest), using the new-ish REST API, and JSON responses.
